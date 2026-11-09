@@ -21,8 +21,55 @@ File name	Purpose
 logic_gates.v	Logic-gate RTL
 logic_gates_tb.v	All input combinations and VCD generation
  # Verilog  Program
+ module basic_gates (
+    input  wire a,
+    input  wire b,
+    output wire y_and,
+    output wire y_or,
+    output wire y_not
+);
+
+    assign y_and = a & b;   // AND gate
+    assign y_or  = a | b;   // OR gate
+    assign y_not = ~a;      // NOT gate (inverter)
+
+endmodule
 
 # **Test Bench Program**
+module tb2;
+
+    reg a, b;
+    wire y_and, y_or, y_not;
+
+    // Instantiate the design under test (DUT)
+    basic_gates uut (
+        .a(a),
+        .b(b),
+        .y_and(y_and),
+        .y_or(y_or),
+        .y_not(y_not)
+    );
+
+    initial begin
+        // ---- VCD dump setup ----
+        $dumpfile("basic_gates.vcd");   // name of the VCD file to be generated
+        $dumpvars(0, tb2);               // dump all signals in this testbench hierarchy
+
+        // ---- Apply all 4 input combinations ----
+        $monitor("Time=%0t a=%b b=%b | AND=%b OR=%b NOT(a)=%b", $time, a, b, y_and, y_or, y_not);
+
+        a = 0; b = 0; #10;
+        a = 0; b = 1; #10;
+        a = 1; b = 0; #10;
+        a = 1; b = 1; #10;
+
+        #10 $finish;
+#10;
+    end
+
+endmodule<img width="1600" height="814" alt="c2a3938c-61de-4ad8-9964-4548387e51e3" src="https://github.com/user-attachments/assets/30fdf3cf-92c4-49d4-813b-e1e13d0c3deb" />
+<img width="1600" height="814" alt="c2a3938c-61de-4ad8-9964-4548387e51e3" src="https://github.com/user-attachments/assets/29778a6b-50c4-475f-bfc1-e46646d40aa6" />
+
 
 
 
@@ -79,6 +126,7 @@ The design was compiled and simulated using Synopsys VCS, and the functionality 
 Output
 # OUTPUT
 
+<img width="1600" height="814" alt="image" src="https://github.com/user-attachments/assets/fa5e8d64-86ed-4c1a-9ffb-90a5aaae45ff" />
 
  
 # Viva-Voce Questions
